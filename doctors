@@ -1,0 +1,37 @@
+import { useEffect, useState } from 'react';
+
+export default function DoctorsPage() {
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/doctors')
+      .then(res => res.json())
+      .then(data => setDoctors(data));
+  }, []);
+
+  return (
+    <div className="p-4 bg-gray-50 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4">29 Dermatologists available in JP Nagar, Bangalore</h1>
+      {doctors.map((doc: any) => (
+        <div key={doc.id} className="bg-white p-4 mb-4 rounded-xl shadow">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-semibold">{doc.name}</h2>
+              <p className="text-gray-600">{doc.experience} years experience</p>
+              <p className="text-sm text-gray-500">{doc.location} • {doc.clinic}</p>
+              <p className="text-sm text-gray-500">₹{doc.fee} Consultation fee</p>
+              <p className="text-green-600 text-sm">{doc.rating}% • {doc.reviews} Patient Stories</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              {doc.available && (
+                <span className="text-green-600 text-sm font-medium">Available Today</span>
+              )}
+              <button className="bg-blue-500 text-white px-4 py-1 rounded-xl">Book Clinic Visit</button>
+              <button className="border border-blue-500 text-blue-500 px-4 py-1 rounded-xl">Contact Clinic</button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
